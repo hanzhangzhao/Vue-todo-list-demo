@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue Demo</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="root">  <!--variable interpolation 挂载点-->
+        {{msg}} <!--template 模板-->
+        <div v-html="content"></div> <!--escape character-->
+        <div v-text="content"></div> <!--without escape character-->
+        <div v-html="number"></div>
+        <div v-on:click = "() => {alert('world')}">{{content}}</div>
+        <div v-on:click = "handleClick">{{content}}</div>
+        <div v-on:click = "handleClick2">{{content}}</div>
+        <div @click = "handleClick2">{{content}}</div> <!--"@" can be considered as "v-on:"-->
+        
+        <div v-bind:title="title">hello world</div> <!--content after "=" here can be considered as a js expression--> 
+        <div :title="title">hello world</div> <!--"v-bind" can be write as ":" --> <!--property bind-->
+
+        <input v-model="content2"/> <!--"v-model" Two-way data binding --> <!--bind changes to an object’s properties to changes in the UI, and viceversa.-->
+        <div>{{content2}}</div>
+
+        First Name: <input v-model="firstName"/>
+        Last Name: <input v-model="lastName"/>
+
+        <div>{{fullName}}</div>
+
+        <div>{{count}}</div>
+    </div>  
+
+    <script>
+        new Vue({ //Vue instance
+            el: "#root", //bind to #root node, tell Vue where inside our HTML we want our vue object to be displayed.  selector 
+            // template: "<h1>World {{msg}}</h1>",
+            data: { //Every Vue instance has a local storage, like a box of variables and properties. Data holds a JavaScript object
+                msg: "hello ",  // property defined inside the data object for vue instance
+                content: "<h1>hello</h1>",
+                number:"123",
+
+                title: "this is hello world",
+                content2: "try me",
+
+                firstName: "",
+                lastName: "",
+
+                count: 0,
+            },
+            methods: {
+                handleClick: function() {
+                    alert('world');
+                },
+                handleClick2: function() {
+                    this.content = "<h1>world</h1>"; // consider as doms in js
+                }
+            },
+            computed: { // computered property only recalculate once dependent property has changed. otherwise use its cached computed value
+                fullName: function() {
+                    return this.lastName + ' ' + this.firstName;
+                },
+            },
+            watch: { // listener, watch if the data has changed, once changed, do the function
+                fullName: function() {
+                    this.count ++;
+                },
+            }
+        })
+    </script>
+</body>
+</html>
